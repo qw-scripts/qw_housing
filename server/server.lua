@@ -56,11 +56,21 @@ lib.callback.register('housing:server:isOwner', function(source, owner)
     return false
 end)
 
-lib.callback.register('houses:server:purchase', function(source, houseId)
+lib.callback.register('houses:server:purchase', function(source, houseId, price)
     local player = QBCore.Functions.GetPlayer(source)
     if not player then return false end
 
     local CID = player.PlayerData.citizenid
+    local cash = player.PlayerData.money.cash
+    local bank = player.PlayerData.money.bank
+
+    if bank > price then
+        player.Functions.RemoveMoney('bank', price, 'property-purchase')
+    elseif cash > price then
+        player.Functions.RemoveMoney('cash', price, 'property-purchase')
+    else
+        return false
+    end
 
     local newOwner = db.updateNewOwner(CID, houseId)
 

@@ -11,7 +11,7 @@ local function pruchaseHouse(data)
                 description = ('buy this property for **$%s**'):format(data.price),
                 icon = 'dollar-sign',
                 onSelect = function()
-                    local purchased = lib.callback.await('houses:server:purchase', 100, data.id)
+                    local purchased = lib.callback.await('houses:server:purchase', 100, data.id, data.price)
 
                     if purchased then
                         QBCore.Functions.Notify('Property purchased', 'success')
